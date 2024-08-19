@@ -23,5 +23,24 @@ export function usarBD() {
             await regras.finalizeAsync();
         }
     }
-    return { create }
+    
+    async function read(nome) {
+        try {
+            const consulta = "SELECT * FROM produtos WHERE nome LIKE ?";
+            const resposta = await bd.getAllAsync(consulta, `%${nome}%`);
+            return resposta;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function remove(id) {
+        try {
+            await bd.execAsync("DELETE FROM produtos WHERE id = " + id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+   return { create, read, remove }
 }
